@@ -1,0 +1,178 @@
+sudo service docker status
+sudo service docker stop
+sudo service docker restart
+//
+docker-compose up -d nginx mysql phpmyadmin (Subindo)
+docker-compose down (Baixando)
+//Entrando do Contaniners
+docker container exec -it laradock_workspace_1 bash
+//Sai do Contaniners
+Ctrl + p +q
+//
+
+composer create-project --prefer-dist laravel/laravel laravel-seven
+http://laravel-school:
+http://localhost:8081/
+//
+// No caso de alterar algum arquivos
+composer dumpautoload
+composer update
+ll public
+php artisan key:generate
+php artisan storage:link
+//
+php artisan migrate
+
+//
+//Git   //Git   //Git
+//
+git init
+ git status
+ git add .
+ git add --all
+ git commit -m "Update do .env.example";
+ git remote add origin https://github.com/PRO210/laravel-seven.git
+ git remote
+
+ git push origin master (Enviar do branch local para ao remoto)
+ git push origin master --force (Força o envio do branch local para ao remoto)
+
+ git remote update #vai atualizar os branches locais com as copias do repositório online
+ git reset upstream/master
+ git pull -r upstream master
+
+ git log
+
+ git branch
+ git branch -a (Diz qual branch estou)
+ git branch feature-api    (cria a branch feature-api)
+
+ git checkout feature-api  (nós move para a branch feature-api)
+ git checkout master
+
+ git merge feature-api     (traz as alterações da branch feature-api)
+ git merge upgrade-to-7x     (traz as alterações da branch feature-api)
+ git merge master
+
+ git branch -D feature-api (Apagar um branch local)
+ git push origin --delete feature-api (Apagar um branch remoto)
+ git branch -dr origin/feature-api
+//
+//
+https://github.com/jeroennoten/Laravel-AdminLTE#2-installation
+composer require jeroennoten/laravel-adminlte
+php artisan adminlte:install
+    Config = AdminLTE
+//
+//Plan          //Plan        //Plan
+php artisan make:model Models\\Plan -m
+php artisan make:request StoreUpdateDetailPlan
+php artisan make:observer PlanObserver --model=Models\\Plan
+//
+//
+php artisan make:model Models\\DetailPlan -m
+php artisan make:controller Admin\\DetailPlanController --resource
+php artisan make:request StoreUpdateDetailPlan
+//
+//
+php artisan make:model Models\\Profile -m
+php artisan make:controller Admin\\ACL\\ProfileController --resource
+php artisan make:request StoreUpdateProfile
+//
+//
+php artisan make:controller Admin\\ACL\\PlanProfileController --resource
+php artisan make:migration create_plan_profile_table
+//
+// O CRUD de Permissões - Speed Code.Obs: Cria também a tabela pivot.
+php artisan make:migration create_permission_profile_table
+php artisan make:controller Admin\\ACL\\PermissionProfileController --resource
+//
+//Debugar o projeto
+https://github.com/barryvdh/laravel-debugbar
+composer require barryvdh/laravel-debugbar --dev
+
+<script src="{{url('./vendor/jquery/jquery.min.js')}}" type="text/javascript"></script>
+@include('admin.includes.alerts')
+//
+//
+composer require laravel/ui
+php artisan ui vue --auth
+//
+//Deixe assim no RouteServiceProvider
+public const HOME = '/admin';
+//Altere as views para usar as do admin
+php artisan adminlte:install --only=auth_views
+https://fontawesome.com/icons
+https://icons.getbootstrap.com/
+//
+//
+php artisan migrate
+php artisan migrate:refresh
+php artisan migrate:refresh --seed
+php artisan migrate:refresh --step=1
+//
+//
+php artisan make:seeder UsersTableSeeder
+php artisan make:seeder TenantsTableSeeder
+php artisan make:seeder PlansTableSeeder
+php artisan db:seed
+//
+// Página Inicial do Site       Página Inicial do Site
+php artisan make:controller Site\\SiteController
+//
+// Usuários     // Usuários     // Usuários
+php artisan make:controller Admin\\UserController
+//
+// Cargos       Cargos      Cargos
+php artisan make:model Models\\Role -m
+php artisan make:controller Admin\\ACL\\RoleController
+php artisan make:request StoreUpdateRole
+//
+// Cria um evento para criar um cargo ao se cadastrar em um plano
+php artisan make:event TenantCreated
+php artisan make:listener AddRoleTenant
+//
+//
+user
+    tenant
+        Plan
+            Profiles
+                Permissões
+
+User:André Freitas da Silva
+
+    Tenant:EspecializaT
+    I
+        Planos:FREE
+            Perfil:Financeiro
+                Permissões:View Financeiro,Investidore etc.
+            Perfil:Admin
+                 Permissões:Visã Geral do Sistema.
+             Perfil:Gestor
+                 Permissões:Gerar Relatórios.
+//
+http://laravel-school:
+http://localhost:8081/
+//Alunos          //Alunos        //Alunos
+php artisan make:model Models\\Aluno -m
+php artisan make:request StoreUpdateAluno
+php artisan make:controller AlunoController --resource
+php artisan make:observer AlunoObserver --model=Models\\Aluno
+//
+//
+//Turmas          //Turmas        //Turmas
+php artisan make:model Models\\Turma -m
+php artisan make:request StoreUpdateTurma
+//
+//Status          //Status        //Status
+php artisan make:model Models\\Classificacao -m
+//
+//Solicitações          //Solicitações        //Solicitações
+php artisan make:model Models\\Solicitacao -m
+//
+//AlunoTurmas       //AlunoTurmas      //AlunoTurmas
+php artisan migrate:refresh --step=1
+php artisan make:migration create_aluno_turma_table
+php artisan make:controller TurmaAlunoController --resource
+
+

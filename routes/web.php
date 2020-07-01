@@ -82,9 +82,41 @@ Route::prefix('admin')
             Route::any('users/{id}/roles/create', 'ACL\RoleUserController@rolesAvailable')->name('users.roles.available');
             Route::get('users/{id}/roles', 'ACL\RoleUserController@roles')->name('users.roles');
             Route::get('roles/{id}/users', 'ACL\RoleUserController@users')->name('roles.users');
-
+            /**
+             * Home Dashboard
+             */
+            Route::get('/', 'DashboardController@home')->name('admin.index');
 
         });
+
+        Route::prefix('alunos')
+            ->group(function(){
+
+                Route::any('search', 'AlunoController@search')->name('alunos.search');
+                Route::get('/', 'AlunoController@index'  )->name('alunos.index');
+                Route::post('aluno', 'AlunoController@store')->name('aluno.store');
+                Route::get('create', 'AlunoController@create')->name('alunos.create');
+        });
+
+        Route::prefix('turmas')
+            ->group(function(){
+
+                Route::get('/alunos', 'TurmaAlunoController@index')->name('turmas.alunos');
+                Route::any('search', 'TurmaController@search')->name('turmas.search');
+                Route::get('/', 'TurmaController@index'  )->name('turmas.index');
+                Route::post('turmas', 'TurmaController@store')->name('turmas.store');
+                Route::get('create', 'TurmaController@create')->name('turmas.create');
+        });
+
+        Route::prefix('alunos')
+        ->group(function(){
+
+
+            Route::post('/turmas/{uuid}', 'TurmaAlunoController@attachTurmasAluno')->name('turmas.aluno.attach');
+            Route::get('/turmas/{uuid}', 'TurmaAlunoController@show')->name('turmas.aluno.show');
+
+        });
+
 
 /**
  * Site

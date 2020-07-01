@@ -4,13 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\{
-    Category,
+   // Category,
     Permission,
     Plan,
-    Product,
+    // Product,
     Profile,
     Role,
-    Table,
+   // Table,
     Tenant,
     User
 };
@@ -23,9 +23,9 @@ class DashboardController extends Controller
         $tenant = auth()->user()->tenant;
 
         $totalUsers = User::where('tenant_id', $tenant->id)->count();
-        $totalTables = Table::count();
-        $totalCategories = Category::count();
-        $totalProducts = Product::count();
+        // $totalTables = Table::count();
+        // $totalCategories = Category::count();
+        // $totalProducts = Product::count();
         $totalTenants = Tenant::count();
         $totalPlans = Plan::count();
         $totalRoles = Role::count();
@@ -34,9 +34,9 @@ class DashboardController extends Controller
 
         return view('admin.pages.home.home', compact(
             'totalUsers',
-            'totalTables',
-            'totalCategories',
-            'totalProducts',
+          //  'totalTables',
+           // 'totalCategories',
+           // 'totalProducts',
             'totalTenants',
             'totalPlans',
             'totalRoles',

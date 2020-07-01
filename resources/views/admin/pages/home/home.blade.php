@@ -24,7 +24,7 @@
             <!-- /.info-box -->
         </div>
 
-        <div class="col-md-3 col-sm-6 col-xs-12">
+        {{-- <div class="col-md-3 col-sm-6 col-xs-12">
             <div class="info-box">
               <span class="info-box-icon bg-aqua">
                   <i class="fas fa-tablet"></i>
@@ -67,7 +67,7 @@
               <!-- /.info-box-content -->
             </div>
             <!-- /.info-box -->
-        </div>
+        </div> --}}
 
         @admin()
         <div class="col-md-3 col-sm-6 col-xs-12">
