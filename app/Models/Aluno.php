@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Turma;
 use App\Observers\AlunoObserver;
 use Illuminate\Support\Facades\DB;
-
+use App\Models\Classificacao;
+use Illuminate\Http\Resources\Json\PaginatedResourceResponse;
 
 class Aluno extends Model
 {
@@ -21,31 +22,46 @@ class Aluno extends Model
 
     public function turmas()
     {
-        return $this->belongsToMany(Turma::class)->withPivot(['OUVINTE', 'classificacao_id', 'turma_id', 'aluno_id']);
+        return $this->belongsToMany(Turma::class, 'aluno_turma')->withPivot(['OUVINTE', 'classificacao_id', 'turma_id', 'aluno_id']);
     }
+
 
     /* Listar as turmas do ano corrente */
     public function correntTurmas()
     {
         $alunos = DB::table('aluno_turma')
-            ->where('aluno_turma.EXCLUIDO', 'LIKE', "NAO")
+            ->where('aluno_turma.EXCLUIDO', 'LIKE', 'NAO')
             ->whereIn('aluno_turma.classificacao_id', [1, 2])
             ->join('alunos', 'aluno_turma.aluno_id', '=', 'alunos.id')
             ->join('turmas', 'aluno_turma.turma_id', '=', 'turmas.id')
-            ->select(
-                'alunos.uuid',
-                'alunos.NOME',
-                'turmas.TURMA',
-                'turmas.UNICO',
-                'turmas.TURNO',
-                'aluno_turma.classificacao_id'
-            )
-            ->orderBy('turmas.TURMA', 'ASC')->orderBy('alunos.NOME', 'ASC')
+            ->select('aluno_turma.aluno_id', 'alunos.NOME', 'aluno_turma.turma_id', 'aluno_turma.classificacao_id')
+            ->orderBy('aluno_turma.turma_id', 'ASC')->orderBy('alunos.NOME', 'ASC')
+            // ->toSql();
             ->get();
-        //->toSql();
-        //->paginate();
-        // dd($alunos);
-        return $alunos;
+        //dd($alunos);
+
+        $alunos_id[] = "";
+        $turmas_id[] = "";
+        foreach ($alunos as $dados) {
+            foreach ($dados as $key => $value) {
+                if ($key == "aluno_id") {
+                    array_push($alunos_id, $value);
+                }
+                if ($key == "turma_id") {
+                    array_push($turmas_id, $value);
+                }
+            }
+        }
+        array_shift($alunos_id);
+        array_shift($turmas_id);
+
+        $alunoTurmas = collect([]);
+        foreach ($alunos_id as $key => $nulo) {
+            $alunoTurmas = $alunoTurmas->concat(Aluno::with(['turmas' => function ($query) use ($turmas_id, $key) {
+                $query->where('turma_id', $turmas_id[$key]);
+            }])->where('id', $alunos_id[$key])->get());
+        }
+        return $alunoTurmas;
     }
 
 

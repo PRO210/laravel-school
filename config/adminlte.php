@@ -414,6 +414,7 @@ return [
                 ],
             ],
         ],
+
         [
             'name' => 'Select2',
             'active' => false,

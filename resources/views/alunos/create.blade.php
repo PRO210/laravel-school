@@ -18,7 +18,7 @@
                 </div>
                 <label for="" class="col-sm-2 control-label">Nascimento</label>
                 <div class="col-sm-4">
-                    <input type="date" name="NASCIMENTO" id="">
+                    <input type="date" name="NASCIMENTO" id="" class=" form-control">
                 </div>
             </div>
         </div>

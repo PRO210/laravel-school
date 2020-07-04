@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Aluno;
 use App\Models\Classificacao;
 use App\Models\Turma;
+use Illuminate\Support\Facades\DB;
 
 class TurmaAlunoController extends Controller
 {
@@ -28,8 +29,6 @@ class TurmaAlunoController extends Controller
 
         $classificacoes = $this->classificacao->get();
 
-      //dd($alunoTurmas);
-        // 'aluno_id', 'alunos.NOME', 'turma_id', 'turmas.TURMA', 'aluno_turma.classificacao_id'
         return view('turmas.alunos.index', compact('alunoTurmas', 'classificacoes'));
     }
 

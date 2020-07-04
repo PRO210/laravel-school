@@ -174,5 +174,6 @@ php artisan make:model Models\\Solicitacao -m
 php artisan migrate:refresh --step=1
 php artisan make:migration create_aluno_turma_table
 php artisan make:controller TurmaAlunoController --resource
+php artisan make:model Models\\TurmaAluno
 
 
