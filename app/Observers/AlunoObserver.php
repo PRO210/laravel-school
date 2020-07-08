@@ -26,7 +26,7 @@ class AlunoObserver
      */
     public function updating(Aluno $aluno)
     {
-        $aluno->uuid = Str::uuid();
+        // $aluno->uuid = Str::uuid();
     }
 
     /**

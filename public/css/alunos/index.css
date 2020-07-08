@@ -1,0 +1,27 @@
+.paddingButton {
+    border-color: aliceblue;
+    padding: 0px;
+}
+
+.table td,
+.table th {
+    padding: 8px;
+}
+
+tfoot input {
+    width: 100%;
+    padding: 3px;
+    box-sizing: border-box;
+}
+#thTfoot{
+    max-width: 50px;
+}
+
+.checkbox {
+    display: inline-block;
+}
+
+@media (max-width: 720px) {
+    #NOME {
+        white-space: normal;
+    }

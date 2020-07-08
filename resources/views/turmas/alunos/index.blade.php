@@ -1,5 +1,3 @@
-<!-- <script src="{{url('./vendor/jquery/jquery.min.js')}}" type="text/javascript"></script> -->
-
 @include('admin.includes.alerts')
 
 @extends('adminlte::page')
@@ -17,126 +15,26 @@
 </nav>
 @stop
 
-
 @section('content')
 
 @section('js')
-
 <!-- jQuery -->
 <script src='{{url("js/jquery-3.5.1.js")}}' type="text/javascript"></script>
-<script src='{{url("js/https _adminlte.io_themes_v3_plugins_jquery_jquery.min.js")}}' type="text/javascript"></script>
-
 <!-- DataTables -->
-<script src='{{url("https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js")}}'></script>
-<script src='{{url("https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js")}}'></script>
-<script src='{{url("https://cdn.datatables.net/responsive/2.2.5/js/dataTables.responsive.min.js")}}'></script>
-<script src='{{url("https://cdn.datatables.net/responsive/2.2.5/js/responsive.bootstrap4.min.js")}}'></script>
-
-<script>
-    $(document).ready(function() {
-
-        // Setup - add a text input to each footer cell
-        $('#example tfoot th').each(function() {
-            var title = $(this).text();
-            $(this).html('<input type="text" placeholder="' + title + '" />');
-        });
-        var table = $('#example').DataTable({
-
-            "columnDefs": [{
-                "targets": 0,
-                "orderable": false
-            }],
-            "lengthMenu": [
-                [5, 10, 15, 20, 100, -1],
-                [5, 10, 15, 20, 100, "All"]
-            ],
-            "language": {
-                "lengthMenu": "_MENU_ ",
-                "zeroRecords": "Nenhum aluno encontrado",
-                "info": "Mostrando pagina _PAGE_ de _PAGES_",
-                "infoEmpty": "Sem registros",
-                "search": "Busca:",
-                "infoFiltered": "(filtrado de _MAX_ total de alunos)",
-                "paginate": {
-                    "first": "Primeira",
-                    "last": "Ultima",
-                    "next": "Proxima",
-                    "previous": "Anterior"
-                },
-                "aria": {
-                    "sortAscending": ": ative a ordenação cressente",
-                    "sortDescending": ": ative a ordenação decressente"
-                }
-            },
-
-        });
-        // Apply the search
-        table.columns().every(function() {
-            var that = this;
-            $('input', this.footer()).on('keyup change', function() {
-                if (that.search() !== this.value) {
-                    that
-                        .search(this.value)
-                        .draw();
-                }
-            });
-        });
-
-    });
-</script>
-<script>
-    //Deixa os checkbox mais bonitos
-    $(document).ready(function() {
-        $(":checkbox").wrap("<span style='background-color:burlywood;padding: 4px; border-radius: 3px;padding-bottom: 4px;'>");
-    });
-</script>
-<script>
-    //Marcar ou Desmarcar todos os checkbox
-    $(document).ready(function() {
-        $('#selecionar').click(function() {
-            if (this.checked) {
-                $('.checkbox').each(function() {
-                    this.checked = true;
-                });
-            } else {
-                $('.checkbox').each(function() {
-                    this.checked = false;
-                });
-            }
-        });
-    });
-</script>
-
+<script src='{{url("js/dataTables/jquery.dataTables.min.js")}}'></script>
+<script src='{{url("js/dataTables/dataTables.bootstrap4.min.js")}}'></script>
+<script src='{{url("js/dataTables/dataTables.responsive.min.js")}}'></script>
+<script src='{{url("js/dataTables/responsive.bootstrap4.min.js")}}'></script>
+<script src='{{url("js/alunos/index.js")}}'></script>
 @stop
 
 @section('css')
 <!-- DataTables CSS-->
-<link rel="stylesheet" href="{{url('https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css')}}">
-<link rel="stylesheet" href="{{url('https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css')}}">
-<link rel="stylesheet" href="{{url('https://cdn.datatables.net/responsive/2.2.5/css/responsive.bootstrap4.min.css')}}">
+<link rel="stylesheet" href="{{url('css/datatables/alunos/bootstrap.css')}}">
+<link rel="stylesheet" href="{{url('css/datatables/alunos/dataTables/bootstrap4.min.css')}}">
+<link rel="stylesheet" href="{{url('css/datatables/responsive.bootstrap4.min.css')}}">
+<link rel="stylesheet" href="{{url('css/alunos/index.css')}}">
 @stop
-
-<style>
-    .paddingButton {
-        border-color: aliceblue;
-        padding: 0px;
-    }
-
-    .table td,
-    .table th {
-        padding: 10px;
-    }
-
-    tfoot input {
-        width: 100%;
-        padding: 3px;
-        box-sizing: border-box;
-    }
-
-    .checkbox {
-        display: inline-block !important;
-    }
-</style>
 
 <form action="#" method="POST" class="form" name="form">
 
@@ -178,7 +76,19 @@
                                                 </svg>
                                             </button>
                                             <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="{{route('turmas.aluno.show',['uuid' => $aluno->uuid])}}" target='_self' title='Incluir na Turma'><span class='glyphicon glyphicon-pencil ' aria-hidden='true'>&nbsp;</span>Incluir na Turma</a>
+                                                <a class="dropdown-item" href="{{route('alunos.edit',['uuid' => $aluno->uuid])}}" target='_self' title='Alterar o Cadastro'>
+                                                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-pencil " fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                        <path fill-rule="evenodd" d="M11.293 1.293a1 1 0 0 1 1.414 0l2 2a1 1 0 0 1 0 1.414l-9 9a1 1 0 0 1-.39.242l-3 1a1 1 0 0 1-1.266-1.265l1-3a1 1 0 0 1 .242-.391l9-9zM12 2l2 2-9 9-3 1 1-3 9-9z" />
+                                                        <path fill-rule="evenodd" d="M12.146 6.354l-2.5-2.5.708-.708 2.5 2.5-.707.708zM3 10v.5a.5.5 0 0 0 .5.5H4v.5a.5.5 0 0 0 .5.5H5v.5a.5.5 0 0 0 .5.5H6v-1.5a.5.5 0 0 0-.5-.5H5v-.5a.5.5 0 0 0-.5-.5H3z" />
+                                                    </svg><b>&nbsp;&nbsp;&nbsp;&nbsp;Alterar o Cadastro</b></a>
+                                                <a class="dropdown-item" href="{{route('turmas.aluno.show',['uuid' => $aluno->uuid])}}" target='_self' title='Incluir na Turma'>
+                                                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-tools" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                        <path fill-rule="evenodd" d="M0 1l1-1 3.081 2.2a1 1 0 0 1 .419.815v.07a1 1 0 0 0 .293.708L10.5 9.5l.914-.305a1 1 0 0 1 1.023.242l3.356 3.356a1 1 0 0 1 0 1.414l-1.586 1.586a1 1 0 0 1-1.414 0l-3.356-3.356a1 1 0 0 1-.242-1.023L9.5 10.5 3.793 4.793a1 1 0 0 0-.707-.293h-.071a1 1 0 0 1-.814-.419L0 1zm11.354 9.646a.5.5 0 0 0-.708.708l3 3a.5.5 0 0 0 .708-.708l-3-3z" />
+                                                        <path fill-rule="evenodd" d="M15.898 2.223a3.003 3.003 0 0 1-3.679 3.674L5.878 12.15a3 3 0 1 1-2.027-2.027l6.252-6.341A3 3 0 0 1 13.778.1l-2.142 2.142L12 4l1.757.364 2.141-2.141zm-13.37 9.019L3.001 11l.471.242.529.026.287.445.445.287.026.529L5 13l-.242.471-.026.529-.445.287-.287.445-.529.026L3 15l-.471-.242L2 14.732l-.287-.445L1.268 14l-.026-.529L1 13l.242-.471.026-.529.445-.287.287-.445.529-.026z" />
+                                                    </svg><b>&nbsp;&nbsp;&nbsp;&nbsp;
+                                                    Gerenciar Turmas
+                                                </a>
+
                                             </div>
                                             &nbsp;<span><input type='checkbox' name='aluno_selecionado[]' for='NOME' class='checkbox' value='{{$aluno->uuid}}/{{$turma->id}}'></span>
                                             &nbsp;<span id="NOME">{{ $aluno->NOME }}</span>
@@ -198,7 +108,7 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th></th>
+                                    <th id="thTfoot"></th>
                                     <th>ALUNO</th>
                                     <th>TURMA</th>
                                     <!-- <th>OUVINTE</th> -->

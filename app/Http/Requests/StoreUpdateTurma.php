@@ -25,7 +25,6 @@ class StoreUpdateTurma extends FormRequest
     {
         return [
             'TURMA' => "required|min:3|max:11|",
-
         ];
     }
 }

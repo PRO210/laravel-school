@@ -62,7 +62,7 @@ class TurmaAlunoController extends Controller
     public function show($uuid)
     {
         $alunoTurmas = $this->aluno->with(['turmas'])->where('uuid', $uuid)->get();
-
+        //dd($alunoTurmas);
         $aluno = $this->aluno->where('uuid', $uuid)->first();
 
         $turmas = $aluno->turmasAvailable();
@@ -116,13 +116,13 @@ class TurmaAlunoController extends Controller
         $aluno = $this->aluno->where('uuid', $uuid)->first();
 
         if ($request->salvar == "salvar") {
-
             $attach = $this->aluno->attach($request, $aluno);
-            return redirect()->route('turmas.index')->with('message', 'Operação Realizada com Sucesso!');
+            return redirect()->action('TurmaAlunoController@show', ['uuid' => $uuid])->with('message', 'Operação Realizada com Sucesso!');
         } else {
-
             $detach = $this->aluno->detach($request, $aluno);
-            return redirect()->route('turmas.index')->with('message', 'Operação Realizada com Sucesso!');
+            // return redirect()->route('turmas.index')->with('message', 'Operação Realizada com Sucesso!');
+            return redirect()->action('TurmaAlunoController@show', ['uuid' => $uuid])->with('message', 'Operação Realizada com Sucesso!');
+
         }
     }
 }

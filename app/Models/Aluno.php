@@ -11,7 +11,10 @@ use Illuminate\Http\Resources\Json\PaginatedResourceResponse;
 
 class Aluno extends Model
 {
-    protected $fillable = ['NOME', 'NASCIMENTO', 'uuid'];
+    protected $fillable =
+    [
+        'NOME', 'NASCIMENTO', 'uuid', 'CERTIDAO_CIVIL', 'MODELO_CERTIDAO', 'MATRICULA_CERTIDAO', 'DADOS_CERTIDAO', 'EXPEDICAO_CERTIDAO', 'NUMERO_RG', 'ORGAO_EXPEDIDOR_RG', 'EXPEDICAO_RG', 'CPF', 'NATURALIDADE', 'ESTADO', 'NACIONALIDADE', 'SEXO', 'NIS', 'BOLSA_FAMILIA', 'SUS', 'NECESSIDADES_ESPECIAIS', 'NECESSIDADES_ESPECIAIS_DESCRICACAO', 'NECESSIDADES_ESPECIAIS_CODIGO', 'COR', 'FONE', 'FONE_II', 'EMAIL', 'MAE', 'PROF_MAE', 'PAI', 'PROF_PAI', 'ENDERECO', 'URBANO', 'CIDADE', 'CIDADE_ESTADO', 'TRANSPORTE', 'PONTO_ONIBUS', 'MOTORISTA', 'MOTORISTA_II', 'OBSERVACOES', 'EXCLUIDO', 'EXCLUIDO_PASTA', 'ATUALIZACOES'
+    ];
 
     public function search($filter = null)
     {
@@ -22,11 +25,15 @@ class Aluno extends Model
 
     public function turmas()
     {
-        return $this->belongsToMany(Turma::class, 'aluno_turma')->withPivot(['OUVINTE', 'classificacao_id', 'turma_id', 'aluno_id']);
+        return $this->belongsToMany(Turma::class, 'aluno_turma')->withPivot([
+            'OUVINTE', 'classificacao_id', 'turma_id', 'aluno_id', 'DECLARACAO',
+            'DECLARACAO_DATA', 'DECLARACAO_RESPONSAVEL', 'TRANSFERENCIA', 'TRANSFERENCIA_DATA', 'TRANSFERENCIA_RESPONSAVEL'
+        ]);
     }
 
-
-    /* Listar as turmas do ano corrente */
+    /*
+    Listar as turmas do ano corrente
+     */
     public function correntTurmas()
     {
         $alunos = DB::table('aluno_turma')
@@ -87,13 +94,18 @@ class Aluno extends Model
     }
 
     public function attach($request, $aluno)
+
     {
         if (isset($request->turma_id)) {
             foreach ($request->turma_id as $turma) {
                 $posionId = explode('/', $turma);
                 $posion = $posionId[0];
                 $turma_id = $posionId[1];;
-                $aluno->turmas()->updateExistingPivot($turma_id, ['classificacao_id' => $request->classificacao_id[$posion], 'OUVINTE' => $request->OUVINTE[$posion], 'updated_at' => NOW()]);
+                $aluno->turmas()->updateExistingPivot($turma_id, [
+                    'classificacao_id' => $request->classificacao_id[$posion], 'OUVINTE' => $request->OUVINTE[$posion],
+                    'DECLARACAO' => $request->DECLARACAO[$posion], 'DECLARACAO_DATA' => $request->DECLARACAO_DATA[$posion], 'DECLARACAO_RESPONSAVEL' => $request->DECLARACAO_RESPONSAVEL[$posion],
+                    'TRANSFERENCIA' => $request->TRANSFERENCIA[$posion], 'TRANSFERENCIA_DATA' => $request->TRANSFERENCIA_DATA[$posion], 'TRANSFERENCIA_RESPONSAVEL' => $request->TRANSFERENCIA_RESPONSAVEL[$posion],'updated_at' => NOW()
+                ]);
             }
         }
 
@@ -102,7 +114,11 @@ class Aluno extends Model
                 $posionId = explode('/', $turma);
                 $posion = $posionId[0];
                 $turma_id = $posionId[1];;
-                $aluno->turmas()->attach($turma_id, ['classificacao_id' => $request->classificacao_id_02[$posion], 'OUVINTE' => $request->OUVINTE_02[$posion], 'updated_at' => NOW()]);
+                $aluno->turmas()->attach($turma_id, [
+                    'classificacao_id' => $request->classificacao_id_02[$posion], 'OUVINTE' => $request->OUVINTE_02[$posion],
+                    'DECLARACAO' => $request->DECLARACAO_02[$posion], 'DECLARACAO_DATA' => $request->DECLARACAO_DATA_02[$posion], 'DECLARACAO_RESPONSAVEL' => $request->DECLARACAO_RESPONSAVEL_02[$posion],
+                    'TRANSFERENCIA' => $request->TRANSFERENCIA_02[$posion], 'TRANSFERENCIA_DATA' => $request->TRANSFERENCIA_DATA_02[$posion], 'TRANSFERENCIA_RESPONSAVEL' => $request->TRANSFERENCIA_RESPONSAVEL_02[$posion], 'updated_at' => NOW()
+                ]);
             }
         }
     }
