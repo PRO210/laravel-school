@@ -1,4 +1,3 @@
-<script src="{{url('./vendor/jquery/jquery.min.js')}}" type="text/javascript"></script>
 @include('admin.includes.alerts')
 
 @extends('adminlte::page')

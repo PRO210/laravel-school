@@ -7,6 +7,7 @@ use App\Models\Turma;
 use App\Observers\AlunoObserver;
 use Illuminate\Support\Facades\DB;
 use App\Models\Classificacao;
+use App\Models\AlunoTurma;
 use Illuminate\Http\Resources\Json\PaginatedResourceResponse;
 
 class Aluno extends Model
@@ -70,8 +71,6 @@ class Aluno extends Model
         }
         return $alunoTurmas;
     }
-
-
     /*
     Recupera as turmas em que o aluno não está matriculado
     */
@@ -92,9 +91,10 @@ class Aluno extends Model
 
         return $turmas;
     }
-
+    /*
+    Vincula um único aluno a uma turma
+    */
     public function attach($request, $aluno)
-
     {
         if (isset($request->turma_id)) {
             foreach ($request->turma_id as $turma) {
@@ -104,11 +104,10 @@ class Aluno extends Model
                 $aluno->turmas()->updateExistingPivot($turma_id, [
                     'classificacao_id' => $request->classificacao_id[$posion], 'OUVINTE' => $request->OUVINTE[$posion],
                     'DECLARACAO' => $request->DECLARACAO[$posion], 'DECLARACAO_DATA' => $request->DECLARACAO_DATA[$posion], 'DECLARACAO_RESPONSAVEL' => $request->DECLARACAO_RESPONSAVEL[$posion],
-                    'TRANSFERENCIA' => $request->TRANSFERENCIA[$posion], 'TRANSFERENCIA_DATA' => $request->TRANSFERENCIA_DATA[$posion], 'TRANSFERENCIA_RESPONSAVEL' => $request->TRANSFERENCIA_RESPONSAVEL[$posion],'updated_at' => NOW()
+                    'TRANSFERENCIA' => $request->TRANSFERENCIA[$posion], 'TRANSFERENCIA_DATA' => $request->TRANSFERENCIA_DATA[$posion], 'TRANSFERENCIA_RESPONSAVEL' => $request->TRANSFERENCIA_RESPONSAVEL[$posion], 'updated_at' => NOW()
                 ]);
             }
         }
-
         if (isset($request->turma_id_02)) {
             foreach ($request->turma_id_02 as $turma) {
                 $posionId = explode('/', $turma);
@@ -122,7 +121,9 @@ class Aluno extends Model
             }
         }
     }
-
+    /*
+    Desvincula um único aluno da turma
+    */
     public function detach($request, $aluno)
     {
         if (isset($request->turma_id)) {
@@ -133,4 +134,53 @@ class Aluno extends Model
             }
         }
     }
+
+    // Recupera os alunos via request para a edilção em bloco
+    public function correntAlunos($request)
+    {
+        $alunosTurma = collect([]);
+        foreach ($request->aluno_selecionado as $id) {
+            $ids = explode('/', $id);
+            $id_aluno = $ids[0];
+            $id_turma = $ids[1];
+
+            $alunosTurma = $alunosTurma->concat(Aluno::with(['turmas' => function ($query) use ($id_turma) {
+                $query->where('turma_id', $id_turma);
+            }])->where('uuid', $id_aluno)->paginate(5));
+        }
+        return $alunosTurma;
+    }
+    /*
+    Atualização em bloco para os alunos:turmas,
+    */
+    public function updateAttach($request)
+    {
+        //  Limpando os vinculos  da Tabela alunoturma
+        foreach ($request->aluno_selecionado as $id) {
+
+            $ids = explode('/', $id);
+            $aluno_uuid = $ids[0];
+            $turma_id = $ids[1];
+            $aluno_id = $ids[2];
+            $aluno_turma_delete = AlunoTurma::where('aluno_id', $aluno_id)->where('turma_id', $turma_id)->delete();
+        }
+        /*
+        Colocando os alunos na turma
+       */
+        foreach ($request->aluno_selecionado as $id) {
+
+            $ids = explode('/', $id);
+            $aluno_id = $ids[2];
+            $aluno = Aluno::where('id', $aluno_id)->first();
+
+            $aluno->turmas()->attach($request->turma_id, [
+                'classificacao_id' => $request->classificacao_id, 'OUVINTE' => $request->OUVINTE, 'DECLARACAO' => $request->DECLARACAO,
+                'DECLARACAO_DATA' => $request->DECLARACAO_DATA, 'DECLARACAO_RESPONSAVEL' => $request->DECLARACAO_RESPONSAVEL,
+                'TRANSFERENCIA' => $request->TRANSFERENCIA, 'TRANSFERENCIA_DATA' => $request->TRANSFERENCIA_DATA, 'TRANSFERENCIA_RESPONSAVEL' => $request->TRANSFERENCIA_RESPONSAVEL, 'updated_at' => NOW()
+            ]);
+        }
+    }
+    //
+    //
+    //
 }

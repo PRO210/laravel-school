@@ -1,5 +1,9 @@
+<!--JQuery -->
+<script src="{{url('./vendor/jquery/jquery.min.js')}}" type="text/javascript"></script>
+
+
 {{-- // --}}
-@if ($errors->any())
+@if ($errors->any())<!-- jQuery -->
 <div class="alert alert-warning">
     @foreach ($errors->all() as $error)
     <p>{{ $error }}</p>
@@ -9,9 +13,9 @@
 
 @if(session('message'))
 {{-- <div class="alert alert-success">
-        {{ session('message') }} 
+        {{ session('message') }}
 </div> --}}
-<!--Modal-->                <!--Modal-->            <!--Modal-->        
+<!--Modal-->                <!--Modal-->            <!--Modal-->
 <div class="modal fade" id="teste" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -21,7 +25,7 @@
             </div>
             <div class="modal-body">
                 <div class="alert alert-success" style=" color:white; font-size: 16px; font-weight: bold;" >
-                    {{ session('message') }} 
+                    {{ session('message') }}
                 </div>
             </div>
             <div class="modal-footer">
@@ -38,7 +42,7 @@
     function fechar() {
         $('#teste').modal('hide');
     }
-</script> 
+</script>
 @endif
 
 
@@ -66,7 +70,7 @@
             </div>
         </div>
     </div>
-</div> 
+</div>
 
 <script type='text/javascript'>
     jQuery(document).ready(function () {
@@ -76,8 +80,8 @@
     function fechar() {
         jQuery('#teste_02').modal('hide');
     }
-</script>   
-@endif 
+</script>
+@endif
 
 
 

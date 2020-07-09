@@ -7,7 +7,8 @@ Route::prefix('admin')
     ->middleware('auth')
     ->group(function () {
 
-        //Planos        //Planos        //Planos
+        //Planos        //Planos        //Planos        Route::put('/plans/{url}/', 'Admin\PlanController@update')->name('plans.update');
+
         Route::put('/plans/{url}/', 'PlanController@update')->name('plans.update');
         Route::any('/plans/{url}/edit', 'PlanController@edit')->name('plans.edit');
         Route::any('/search', 'PlanController@search')->name('plans.search');
@@ -92,7 +93,6 @@ Route::prefix('alunos')
     ->group(function () {
 
 
-        Route::put('/plans/{url}/', 'PlanController@update')->name('plans.update');
         Route::put('/{uuid}/update', 'AlunoController@update')->name('aluno.update');
         Route::any('/{uuid}/edit', 'AlunoController@edit')->name('alunos.edit');
         Route::any('search', 'AlunoController@search')->name('alunos.search');
@@ -122,6 +122,8 @@ Route::prefix('turmas')
             ->group(function () {
 
 
+                Route::post('turmas/update/bloco', 'TurmaAlunoController@update')->name('turmas.aluno.update.bloco');
+                Route::post('turmas/edit/bloco', 'TurmaAlunoController@edit')->name('turmas.aluno.edit.bloco');
                 Route::post('/turmas/{uuid}', 'TurmaAlunoController@attachTurmasAluno')->name('turmas.aluno.attach');
                 Route::get('/turmas/{uuid}/show', 'TurmaAlunoController@show')->name('turmas.aluno.show');
             });

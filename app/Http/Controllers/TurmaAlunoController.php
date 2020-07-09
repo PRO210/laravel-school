@@ -4,19 +4,21 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Aluno;
+use App\Models\AlunoTurma;
 use App\Models\Classificacao;
 use App\Models\Turma;
 use Illuminate\Support\Facades\DB;
 
 class TurmaAlunoController extends Controller
 {
-    private $aluno, $turma;
+    private $aluno, $turma, $classificacao, $alunoTurma;
 
-    public function __construct(Turma $turma, Aluno $aluno, Classificacao $classificacao)
+    public function __construct(Turma $turma, Aluno $aluno, Classificacao $classificacao, AlunoTurma $alunoTurma)
     {
         $this->turma = $turma;
         $this->aluno = $aluno;
         $this->classificacao = $classificacao;
+        $this->alunoTurma = $alunoTurma;
     }
     /**
      * Display a listing of the resource.
@@ -37,6 +39,8 @@ class TurmaAlunoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+     // DB::enableQueryLog();
+    // dd(DB::getQueryLog());
     public function create()
     {
         //
@@ -78,9 +82,13 @@ class TurmaAlunoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
-        //
+        $alunos = $this->aluno->correntAlunos($request);
+        $turmas = Turma::orderByDesc('ANO')->orderBy('TURMA', 'ASC')->get();
+        $classificacoes = Classificacao::all()->where('ORDEM_I', 'S');
+        $marcar = "";
+        return view('turmas.alunos.edit', compact('alunos', 'marcar', 'turmas', 'classificacoes'));
     }
 
     /**
@@ -90,9 +98,10 @@ class TurmaAlunoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $update = $this->aluno->updateAttach($request);
+        return redirect()->action('TurmaAlunoController@index');
     }
 
     /**
@@ -122,7 +131,6 @@ class TurmaAlunoController extends Controller
             $detach = $this->aluno->detach($request, $aluno);
             // return redirect()->route('turmas.index')->with('message', 'Operação Realizada com Sucesso!');
             return redirect()->action('TurmaAlunoController@show', ['uuid' => $uuid])->with('message', 'Operação Realizada com Sucesso!');
-
         }
     }
 }
